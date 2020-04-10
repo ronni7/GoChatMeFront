@@ -1,0 +1,59 @@
+<div class="border-thin vertical">
+  <div class="vertical-item horizontal extra-padding-top">
+    <button class="button-container" *ngIf="channelsExpanded" (click)="expandChannels()">
+      <i class="icon fa fa-caret-square-down"></i>
+    </button>
+    <button class="button-container" *ngIf="!channelsExpanded" (click)="expandChannels()">
+      <i class="icon fa fa-caret-square-up"></i>
+    </button>
+    <span>Channels</span>
+    <div class="spacer"></div>
+    <button class="button-container" (click)="showSearch()">
+      <i class="icon fa fa-search-plus"></i>
+    </button>
+
+  </div>
+  <div class="vertical-item horizontal" *ngIf="searchExpanded">
+    <div>
+      <input type="search" class="stretch"/>
+      <span>
+      <button class="button-container" id="search" type="button" (submit)="searchUsers()">
+        <i class="icon fa fa-search"></i>
+      </button>
+      </span>
+    </div>
+  </div>
+  <span class="extra-padding-top"></span>
+  <div class="channel" *ngFor="let channel of channels" [hidden]="channelsExpanded">
+    <div class="vertical-item horizontal  extra-padding-left">
+      <i class="icon fa fa-copyright extra-margin-right"></i>
+      <a class="link" (click)="joinChannel(channel.channelID)">{{channel.name}}</a>
+    </div>
+    <div class="separator-medium"></div>
+  </div>
+</div>
+<div class="separator-big"></div>
+<div class="border-thin vertical">
+  <div class="vertical-item horizontal  extra-padding-top">
+    <button class="button-container" *ngIf="usersExpanded" (click)="expandUsers()">
+      <i class="icon fa fa-caret-square-down"></i>
+    </button>
+    <button class="button-container" *ngIf="!usersExpanded" (click)="expandUsers()">
+      <i class="icon fa fa-caret-square-up"></i>
+    </button>
+    <span>Users</span>
+    <div class="spacer"></div>
+    <button class="button-container" (click)="showUsersSearch()">
+      <i class="icon fa fa-search-plus" (click)="showUsersSearch()"></i>
+    </button>
+  </div>
+  <span class="extra-padding-top"></span>
+  <div class="channel" *ngFor="let user of users" [hidden]="usersExpanded">
+    <div class="vertical-item horizontal  extra-padding-left">
+      <i class="icon fa fa-user extra-margin-right"></i>
+      <a class="link" (click)="joinPrivateChannel(user.id)">{{user.name}}</a>
+
+    </div>
+    <div class="separator-medium"></div>
+  </div>
+</div>

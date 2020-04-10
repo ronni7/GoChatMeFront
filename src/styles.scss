@@ -1,1 +1,96 @@
-/* You can add global styles to this file, and also import other style files */
+.right-margin {
+  margin-right: 1em;
+}
+
+.left-padding {
+  padding-left: 0.5em;
+}
+
+.background {
+  background-color: #54d268;
+}
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.link {
+  cursor: pointer;
+}
+
+.channel {
+  //text-align: center;
+  padding: 0 2px 0 2px;
+  //box-shadow: 1px 1px gold;
+}
+
+.border-thin {
+  border: 2px solid rgba(0, 0, 0, .5);
+}
+
+.extra-padding-left {
+  padding-left: 10px;
+}
+
+.stretch {
+  flex: 1;
+}
+
+.extra-margin-right {
+  margin-right: 10px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.icon {
+  font-weight: 500;
+  display: block;
+  font-size: 20px;
+  background-color: transparent;
+}
+
+.button-container {
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+}
+
+.separator-big {
+  height: 1em;
+}
+
+.extra-padding-top {
+  padding-top: 5px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 14px;
+  color: white;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.separator-small {
+  height: 0.1em;
+}
+
+.separator-medium {
+  height: 0.5em;
+}
+
+.vertical-item {
+  padding-top: 2px;
+}
