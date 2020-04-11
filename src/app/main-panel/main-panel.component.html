@@ -1,0 +1,16 @@
+  <div class="extra-padding-top stretch">
+    <div class="chat-content black-font border-thin stretch scrollable">
+      <div *ngFor="let message of messages">
+        {{message.author}}
+      </div>
+    </div>
+  </div>
+  <div class="horizontal send-container">
+    <input type="text" placeholder="Type message here..." class="stretch">
+    <button class="button-container send-container-background">
+      <i class="send icon fa fa-arrow-right" (click)="sendMessage()"></i>
+    </button>
+
+  </div>
+
+
