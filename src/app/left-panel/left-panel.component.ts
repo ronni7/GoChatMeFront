@@ -47,7 +47,6 @@ export class LeftPanelComponent implements OnInit {
   }
 
   shoWSearch() {
-    console.log('yay');
     this.searchExpanded = !this.searchExpanded;
   }
 

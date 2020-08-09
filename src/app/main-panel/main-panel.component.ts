@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {WebSocketService} from '../../service/web-socket.service';
 
 @Component({
   selector: 'app-main-panel',
@@ -6,13 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main-panel.component.scss']
 })
 export class MainPanelComponent implements OnInit {
+  private messageText: string;
 
-  constructor() { }
+  constructor(private webSocketService: WebSocketService) {
+    this.webSocketService.connectTo();
+  }
 
   ngOnInit() {
   }
 
   sendMessage() {
-    console.log('sendingMessage');
+    this.webSocketService.sendMessage(this.messageText);
   }
 }
