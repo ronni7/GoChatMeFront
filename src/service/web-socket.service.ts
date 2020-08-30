@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import {MessageType} from '../model/enums/MessageType';
+import {Message} from '../model/Message';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,12 @@ export class WebSocketService {
   currentRoomID: number = 1;
   private readonly chatroom: string;
   private chatEndpoint: string;
+  public incomingMessages: Message[] = [];
 
   private username = 'Johnny';
 
   constructor() {
-    this.chatroom = '/chatroom/notifications/';
+    this.chatroom = '/chatroom/' + this.currentRoomID; // was /chatroom/notifications/
     this.chatEndpoint = '/chat/';
     this.socket = new SockJS('https://localhost:8444/chat');
     this.stompClient = Stomp.over(this.socket);
@@ -27,11 +29,11 @@ export class WebSocketService {
 
 
   connectTo() {
-    this.stompClient.connect({'Access-Control-Allow-Credentials': true}, frame => {
+    this.stompClient.connect({}, frame => {
       console.log('Connected: ' + frame);
       this.stompClient.subscribe(
-        this.chatroom, messageOutput => (this.receiveMessage(messageOutput)),
-        {'username': this.username} //this.userService.getUsername();
+        this.chatroom, messageOutput => (this.receiveMessage(JSON.parse(messageOutput.body))),
+        {'username': this.username} // todo this.userService.getUsername();
       );
     }, err => (this.reconnectOnError(err)));
   }
@@ -40,8 +42,9 @@ export class WebSocketService {
     this.stompClient.disconnect();
   }
 
-  receiveMessage(messageOutput) {
-    console.log('message', messageOutput);
+  receiveMessage(messageOutput: Message) {
+    console.log('Message has been received: ', messageOutput);
+    this.incomingMessages.push(messageOutput);
   }
 
   reconnectOnError(error: any) {
@@ -52,7 +55,7 @@ export class WebSocketService {
   }
 
   sendMessage(message?: string) {
-
+    console.log('do tej pory posiadam takie incoming message', this.incomingMessages);
     this.stompClient.send('/chat/' + this.currentRoomID, {},
       JSON.stringify(
         {

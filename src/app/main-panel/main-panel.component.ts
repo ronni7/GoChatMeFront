@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {WebSocketService} from '../../service/web-socket.service';
+import {Message} from '../../model/Message';
 
 @Component({
   selector: 'app-main-panel',
@@ -8,15 +9,19 @@ import {WebSocketService} from '../../service/web-socket.service';
 })
 export class MainPanelComponent implements OnInit {
   private messageText: string;
+  messages: Message[] = [];
 
   constructor(private webSocketService: WebSocketService) {
     this.webSocketService.connectTo();
+    this.messages = webSocketService.incomingMessages;
   }
 
   ngOnInit() {
   }
 
   sendMessage() {
+    console.log('w panelu jakowem wyglada to nieco inaczej', this.messages);
     this.webSocketService.sendMessage(this.messageText);
   }
+
 }

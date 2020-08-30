@@ -46,7 +46,7 @@ export class LeftPanelComponent implements OnInit {
     this.channelsExpanded = !this.channelsExpanded;
   }
 
-  shoWSearch() {
+  showSearch() {
     this.searchExpanded = !this.searchExpanded;
   }
 
@@ -60,10 +60,6 @@ export class LeftPanelComponent implements OnInit {
 
   joinPrivateChannel(id: number) {
     console.log('opening private chat with' + id);
-  }
-
-  showSearch() {
-    this.searchExpanded = !this.searchExpanded;
   }
 
   searchUsers() {

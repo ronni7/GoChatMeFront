@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Message} from '../../model/Message';
 
 @Component({
@@ -7,7 +7,8 @@ import {Message} from '../../model/Message';
   styleUrls: ['./message-list.component.scss']
 })
 export class MessageListComponent implements OnInit {
-  messages: Message[];
+  @Input()
+  messages: Message[] = [];
 
   constructor() { }
 
