@@ -20,8 +20,8 @@ export class MainPanelComponent implements OnInit {
   }
 
   sendMessage() {
-    console.log('w panelu jakowem wyglada to nieco inaczej', this.messages);
     this.webSocketService.sendMessage(this.messageText);
+    this.messageText = '';
   }
 
 }

@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Message} from '../../model/Message';
+import {UIHelperService} from '../../service/uihelper.service';
 
 @Component({
   selector: 'app-message-list',
@@ -10,7 +11,8 @@ export class MessageListComponent implements OnInit {
   @Input()
   messages: Message[] = [];
 
-  constructor() { }
+
+  constructor(private uiHelperService: UIHelperService) { }
 
   ngOnInit() {
 

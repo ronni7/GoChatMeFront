@@ -6,7 +6,7 @@
 <div>
   <div class="separator-big spacer"></div>
   <div class="horizontal send-container">
-    <input id="message" type="text" placeholder="Type message here..." class="stretch" [(ngModel)]="messageText">
+    <input id="message" type="text" placeholder="Type message here..." class="stretch" (keyup.enter)="sendMessage()" [(ngModel)]="messageText">
     <button type="submit" class="button-container send-container-background" (click)="sendMessage()">
       <i class="send icon fa fa-arrow-right"></i>
     </button>
