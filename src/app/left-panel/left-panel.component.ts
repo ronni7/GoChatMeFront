@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ChannelService} from '../../service/channel.service';
 import {Channel} from '../../model/Channel';
 import {User} from '../../model/User';
+import {WebSocketService} from '../../service/web-socket.service';
 
 @Component({
   selector: 'app-left-panel',
@@ -9,23 +10,27 @@ import {User} from '../../model/User';
   styleUrls: ['./left-panel.component.scss']
 })
 export class LeftPanelComponent implements OnInit {
+  @Output() channelSwitched = new EventEmitter<number>();
+  selectedChannelID: number;
   channels: Array<Channel>;
   users: Array<User>;
-  channelsExpanded: boolean = false;
-  searchExpanded: boolean = false;
-  usersExpanded: boolean = false;
-  userSearch: boolean = false;
+  channelsExpanded = false;
+  searchExpanded = false;
+  usersExpanded = false;
+  userSearch = false;
 
-  constructor(private channelService: ChannelService) {
-
+  constructor(private channelService: ChannelService, private webSocketService: WebSocketService) {
   }
 
   ngOnInit() {
     this.initData();
+    this.selectedChannelID = this.webSocketService.currentRoomID;
   }
 
   joinChannel(channelID: number) {
-    console.log('me join channel numero', channelID);
+    this.webSocketService.switchRoom(channelID);
+    this.selectedChannelID = channelID;
+    this.channelSwitched.emit(channelID);
   }
 
   private initData() {
@@ -42,7 +47,6 @@ export class LeftPanelComponent implements OnInit {
   }
 
   expandChannels() {
-    console.log('me work');
     this.channelsExpanded = !this.channelsExpanded;
   }
 
@@ -63,8 +67,7 @@ export class LeftPanelComponent implements OnInit {
   }
 
   searchUsers() {
-    if(this.users)
-    {
+    if (this.users) {
 
     }
   }

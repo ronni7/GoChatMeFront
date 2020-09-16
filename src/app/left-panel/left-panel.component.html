@@ -25,7 +25,8 @@
   </div>
   <span class="extra-padding-top"></span>
   <div class="channel" *ngFor="let channel of channels" [hidden]="channelsExpanded">
-    <div class="vertical-item horizontal  extra-padding-left">
+    <div class="vertical-item horizontal extra-padding-left"
+         [ngClass]="channel.channelID === this.selectedChannelID ? 'selected' : ''">
       <i class="icon fa fa-copyright extra-margin-right"></i>
       <a class="link" (click)="joinChannel(channel.channelID)">{{channel.name}}</a>
     </div>

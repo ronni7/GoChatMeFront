@@ -11,24 +11,22 @@ export class WebSocketService {
 
   socket: SockJS;
   stompClient: any;
-  currentRoomID: number = 1;
-  private readonly chatroom: string;
+  currentRoomID = 1;
+  private chatroom: string;
   private chatEndpoint: string;
   public incomingMessages: Message[] = [];
 
   private username = 'Johnny';
 
   constructor() {
-    this.chatroom = '/chatroom/' + this.currentRoomID; // was /chatroom/notifications/
     this.chatEndpoint = '/chat/';
-    this.socket = new SockJS('https://localhost:8444/chat');
-    this.stompClient = Stomp.over(this.socket);
-    console.log('Starting');
-
   }
 
 
   connectTo() {
+    this.socket = new SockJS('https://localhost:8444/chat');
+    this.stompClient = Stomp.over(this.socket);
+    this.chatroom = '/chatroom/' + this.currentRoomID; // was /chatroom/notifications/
     this.stompClient.connect({}, frame => {
       console.log('Connected: ' + frame);
       this.stompClient.subscribe(
@@ -43,7 +41,6 @@ export class WebSocketService {
   }
 
   receiveMessage(messageOutput: Message) {
-    console.log('Message has been received: ', messageOutput);
     this.incomingMessages.push(messageOutput);
   }
 
@@ -55,7 +52,6 @@ export class WebSocketService {
   }
 
   sendMessage(message?: string) {
-    console.log('do tej pory posiadam takie incoming message', this.incomingMessages);
     this.stompClient.send('/chat/' + this.currentRoomID, {},
       JSON.stringify(
         {
@@ -64,5 +60,12 @@ export class WebSocketService {
           'messageType': MessageType.NORMAL
         }
       ));
+  }
+
+  switchRoom(channelID: number) {
+    this.currentRoomID = channelID;
+    this.disconnect();
+    this.incomingMessages = new Array<Message>();
+    this.connectTo();
   }
 }
