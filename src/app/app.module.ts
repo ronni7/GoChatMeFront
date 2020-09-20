@@ -6,21 +6,29 @@ import {AppComponent} from './app.component';
 import {LeftPanelComponent} from './left-panel/left-panel.component';
 import {ChannelService} from '../service/channel.service';
 import {HttpClientModule} from '@angular/common/http';
-import { MainPanelComponent } from './main-panel/main-panel.component';
+import {MainPanelComponent} from './main-panel/main-panel.component';
+import {MessageListComponent} from './message-list/message-list.component';
+import {WebSocketService} from '../service/web-socket.service';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { AddChannelDialogComponent } from './add-channel-dialog/add-channel-dialog.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LeftPanelComponent,
-    MainPanelComponent
+    MainPanelComponent,
+    MessageListComponent,
+    AddChannelDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
-  providers: [ChannelService],
+  providers: [ChannelService, WebSocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

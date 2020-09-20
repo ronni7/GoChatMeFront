@@ -144,4 +144,62 @@ body {
 }
 
 
+.extra-margin-left {
+  margin-left: 5px;
+}
 
+.message {
+  margin: 1px 5px;
+}
+
+.selected {
+  background-color: #73e5eb;
+}
+
+.modal-dialog {
+  display: block;
+  position: fixed;
+  left: 25%;
+  right: 25%;
+  top: 30vh;
+  bottom: 30vh;
+  z-index: 9;
+  min-width: 20vw;
+  max-width: 50vw;
+  width: 50%;
+  border: 0.4em solid black;
+  overflow: auto;
+}
+
+.content-centered {
+  text-align: center;
+}
+
+.cursor-disable {
+  cursor: auto;
+}
+
+.indented {
+  margin: 5px;
+}
+
+input[type=checkbox]{
+  transform: scale(1.25);
+}
+
+.form {
+  display: inline-flex;
+}
+
+.title {
+  border-bottom: 0.1em solid black;
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.form-field {
+  text-align: left;
+  align-items: center;
+}

@@ -25,10 +25,10 @@
   </div>
   <div class="body-container">
     <div class="vertical left-panel background scrollable">
-      <app-left-panel ></app-left-panel>
+      <app-left-panel (channelSwitched)="switchChannel($event)"></app-left-panel>
     </div>
     <div class="vertical stretch center-panel scrollable">
-      <app-main-panel class="vertical stretch">
+      <app-main-panel [clear]="eventsSubject.asObservable()" class="vertical stretch">
         <router-outlet></router-outlet>
       </app-main-panel>
     </div>
