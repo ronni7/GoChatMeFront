@@ -16,8 +16,19 @@ export class ChannelService {
     return this.http.get<Channel[]>('https://localhost:8444/goChatMe/channel/channels');
   }
 
+  getChannelsByName(channelName: string) {
+    return this.http.get<Channel[]>('https://localhost:8444/goChatMe/channel/channelsByName?name=' + channelName.trim());
+  }
+
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>('https://localhost:8444/goChatMe/users');
   }
 
+  getUsersByName(userName: string): Observable<User[]> {
+    return this.http.get<User[]>('https://localhost:8444/goChatMe/usersByName?name=' + userName.trim());
+  }
+
+  addChannel(body: Channel): Observable<Channel> {
+    return this.http.post<Channel>('https://localhost:8444/goChatMe/channel/addChannel', body);
+  }
 }

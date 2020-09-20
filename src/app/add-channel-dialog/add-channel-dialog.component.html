@@ -1,0 +1,24 @@
+<form (click)="dispatch($event)" [formGroup]="formGroup" (ngSubmit)="submit()"
+      class="form vertical background modal-dialog cursor-disable stretch">
+  <h2 class="title no-margin content-centered">Add channel:</h2>
+  <div class="vertical indented stretch">
+    <div class="form-field horizontal">
+      <label id="nameLabel" for="name">Name:</label>
+      <input formControlName="name" id="name" type="text" class="extra-margin-left stretch"/>
+    </div>
+    <div class="form-field horizontal">
+      <label id="descriptionLabel" for="description">Description:</label>
+      <textarea formControlName="description" id="description" class="extra-margin-left stretch"
+                maxlength="255"></textarea>
+    </div>
+    <div class="form-field horizontal">
+      <label id="adultsOnlyLabel" for="adultsOnly">Adults only:</label>
+      <input formControlName="adultsOnly" id="adultsOnly" type="checkbox" class="checkbox extra-margin-left"/>
+    </div>
+  </div>
+
+  <div class="indented content-centered">
+    <button [disabled]="!isValid()" id="send" type="submit" (submit)="submit()" value="Submit">Submit</button>
+    <button id="cancel" type="button" (click)="closeDialog()" value="Cancel">Cancel</button>
+  </div>
+</form>

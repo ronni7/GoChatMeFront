@@ -9,7 +9,8 @@ import {HttpClientModule} from '@angular/common/http';
 import {MainPanelComponent} from './main-panel/main-panel.component';
 import {MessageListComponent} from './message-list/message-list.component';
 import {WebSocketService} from '../service/web-socket.service';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { AddChannelDialogComponent } from './add-channel-dialog/add-channel-dialog.component';
 
 
 @NgModule({
@@ -17,13 +18,15 @@ import {FormsModule} from '@angular/forms';
     AppComponent,
     LeftPanelComponent,
     MainPanelComponent,
-    MessageListComponent
+    MessageListComponent,
+    AddChannelDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [ChannelService, WebSocketService],
   bootstrap: [AppComponent]

@@ -8,23 +8,26 @@
     </button>
     <span>Channels</span>
     <div class="spacer"></div>
+    <button class="button-container" id="add" type="button" (click)="toggleAddChannelVisible()">
+      <i class="icon fa fa-plus-circle"></i>
+    </button>
     <button class="button-container" (click)="showSearch()">
       <i class="icon fa fa-search-plus"></i>
     </button>
 
   </div>
-  <div class="vertical-item horizontal" *ngIf="searchExpanded">
-    <div>
-      <input type="search" class="stretch"/>
+  <div class="vertical-item horizontal" *ngIf="channelSearchExpanded">
+    <div class="horizontal stretch">
+      <input type="search" class="stretch" [(ngModel)]="channelFilterText" (input)="filterChannels()"/>
       <span>
-      <button class="button-container" id="search" type="button" (submit)="searchUsers()">
+      <button class="button-container" id="search" type="button" (click)="searchChannels()">
         <i class="icon fa fa-search"></i>
       </button>
       </span>
     </div>
   </div>
   <span class="extra-padding-top"></span>
-  <div class="channel" *ngFor="let channel of channels" [hidden]="channelsExpanded">
+  <div class="channel" *ngFor="let channel of channelsDisplayed" [hidden]="channelsExpanded">
     <div class="vertical-item horizontal extra-padding-left"
          [ngClass]="channel.channelID === this.selectedChannelID ? 'selected' : ''">
       <i class="icon fa fa-copyright extra-margin-right"></i>
@@ -45,15 +48,25 @@
     <span>Users</span>
     <div class="spacer"></div>
     <button class="button-container" (click)="showUsersSearch()">
-      <i class="icon fa fa-search-plus" (click)="showUsersSearch()"></i>
+      <i class="icon fa fa-search-plus"></i>
     </button>
   </div>
+  <div class="vertical-item horizontal" *ngIf="userSearchExpanded">
+    <div class="horizontal stretch">
+      <input type="search" class="stretch"  [(ngModel)]="userFilterText" (input)="filterUsers()"/>
+      <span>
+      <button class="button-container" id="searchUser" type="button" (click)="searchUsers()">
+        <i class="icon fa fa-search"></i>
+      </button>
+      </span>
+    </div>
+  </div>
+  <app-add-channel-dialog *ngIf="addChannelVisible" (close)="onDialogClose()"></app-add-channel-dialog>
   <span class="extra-padding-top"></span>
-  <div class="channel" *ngFor="let user of users" [hidden]="usersExpanded">
+  <div class="channel" *ngFor="let user of usersDisplayed" [hidden]="usersExpanded">
     <div class="vertical-item horizontal  extra-padding-left">
       <i class="icon fa fa-user extra-margin-right"></i>
       <a class="link" (click)="joinPrivateChannel(user.id)">{{user.name}}</a>
-
     </div>
     <div class="separator-medium"></div>
   </div>
