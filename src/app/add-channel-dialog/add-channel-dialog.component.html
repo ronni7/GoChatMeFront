@@ -8,17 +8,17 @@
     </div>
     <div class="form-field horizontal">
       <label id="descriptionLabel" for="description">Description:</label>
-      <textarea formControlName="description" id="description" class="extra-margin-left stretch"
+      <textarea formControlName="description" id="description" class="extra-margin-left stretch textarea"
                 maxlength="255"></textarea>
     </div>
     <div class="form-field horizontal">
       <label id="adultsOnlyLabel" for="adultsOnly">Adults only:</label>
-      <input formControlName="adultsOnly" id="adultsOnly" type="checkbox" class="checkbox extra-margin-left"/>
+      <input formControlName="adultsOnly" id="adultsOnly" type="checkbox" class="extra-margin-left checkbox-field"/>
     </div>
   </div>
 
   <div class="indented content-centered">
-    <button [disabled]="!isValid()" id="send" type="submit" (submit)="submit()" value="Submit">Submit</button>
-    <button id="cancel" type="button" (click)="closeDialog()" value="Cancel">Cancel</button>
+    <input class="form-button" [disabled]="!isValid()" id="send" type="submit" (submit)="submit()" value="Submit"/>
+    <input class="form-button" id="cancel" type="button" (click)="closeDialog()" value="Cancel"/>
   </div>
 </form>
