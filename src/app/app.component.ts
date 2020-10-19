@@ -9,15 +9,19 @@ import {Subject} from 'rxjs';
 export class AppComponent {
   title = 'goChatMe';
   channelID: number;
-  eventsSubject: Subject<void> = new Subject<void>();
+  channelSwitched: Subject<void> = new Subject<void>();
+  token: string;
+  privateChannelSwitched: Subject<string> = new Subject<string>();
 
-  emitEventToChild() {
-    this.eventsSubject.next();
-  }
 
   switchChannel(channelID: number) {
     this.channelID = channelID;
-    this.emitEventToChild();
+    this.channelSwitched.next();
+  }
+
+  switchPrivateChannel(token: string) {
+    this.token = token;
+    this.privateChannelSwitched.next(token);
   }
 
 }

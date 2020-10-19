@@ -3,6 +3,7 @@ import {ChannelService} from '../../service/channel.service';
 import {Channel} from '../../model/Channel';
 import {User} from '../../model/User';
 import {WebSocketService} from '../../service/web-socket.service';
+import {UserContextService} from '../../service/user-context.service';
 
 @Component({
   selector: 'app-left-panel',
@@ -11,6 +12,7 @@ import {WebSocketService} from '../../service/web-socket.service';
 })
 export class LeftPanelComponent implements OnInit {
   @Output() channelSwitched = new EventEmitter<number>();
+  @Output() privateChannelSwitched = new EventEmitter<string>();
   selectedChannelID: number;
   channels: Array<Channel>;
   channelsDisplayed: Array<Channel>;
@@ -23,8 +25,10 @@ export class LeftPanelComponent implements OnInit {
   channelFilterText: string;
   userFilterText: string;
   addChannelVisible = false;
+  viewingPrivateChannel = false;
+  selectedNickname: string;
 
-  constructor(private channelService: ChannelService, private webSocketService: WebSocketService) {
+  constructor(private userContextService: UserContextService, private channelService: ChannelService, private webSocketService: WebSocketService) {
   }
 
   ngOnInit() {
@@ -33,9 +37,11 @@ export class LeftPanelComponent implements OnInit {
   }
 
   joinChannel(channelID: number) {
-    this.webSocketService.switchRoom(channelID);
-    this.selectedChannelID = channelID;
-    this.channelSwitched.emit(channelID);
+    const id = channelID;
+    this.viewingPrivateChannel = false;
+    this.webSocketService.switchRoom(id);
+    this.selectedChannelID = id;
+    this.channelSwitched.emit(id);
   }
 
   private initData() {
@@ -95,8 +101,18 @@ export class LeftPanelComponent implements OnInit {
     this.userSearchExpanded = !this.userSearchExpanded;
   }
 
-  joinPrivateChannel(id: number) {
-    console.log('opening private chat with' + id);
+  joinPrivateChannel(nickname: string) {
+    this.channelService.createPrivateChannel(this.userContextService.userID, nickname).subscribe(response => {
+      if (response && !response.exists) {
+        this.sendNotification(nickname, response.token);
+      }
+      this.webSocketService.switchPrivateRoom(response.token);
+      this.webSocketService.connectToCreatedPrivateChat(response.token);
+      this.selectedNickname = nickname;
+      this.privateChannelSwitched.emit(response.token);
+      this.viewingPrivateChannel = true;
+    });
+
   }
 
   filterChannels() {
@@ -133,4 +149,10 @@ export class LeftPanelComponent implements OnInit {
     this.getChannels();
     this.toggleAddChannelVisible();
   }
+
+  sendNotification(name: string, token: string) {
+    this.webSocketService.sendNotification(name, token);
+  }
+
 }
+

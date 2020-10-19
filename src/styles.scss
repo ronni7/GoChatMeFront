@@ -58,6 +58,19 @@
   background-color: transparent;
 }
 
+.toolbar-icon {
+  cursor: pointer;
+}
+
+.toolbar-icon:hover {
+  background-color: skyblue;
+}
+
+.icon.toolbar-icon {
+  font-size: 30px;
+}
+
+
 .button-container {
   background-color: Transparent;
   background-repeat: no-repeat;
@@ -231,4 +244,55 @@ input[type=checkbox] {
 
 .form-button:hover {
   cursor: pointer;
+}
+
+.toolbar {
+  height: 4em;
+  margin: -8px;
+  display: flex;
+  align-items: center;
+  background-color: #54d268;
+  color: white;
+  font-weight: 600;
+}
+
+.notification-counter {
+  position: absolute;
+  top: 0.5px;
+  right: 41px;
+  padding: 2px 5px;
+  border-radius: 25%;
+  background: red;
+  color: white;
+  cursor: pointer;
+}
+
+.menu {
+  position: absolute;
+  top: 40px;
+  right: 30px;
+  z-index: 99;
+  background-color: black;
+  color: white;
+}
+
+.menu-item {
+  color: white;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: skyblue;
+}
+
+.accept {
+  color: green;
+}
+
+.decline {
+  color: red;
+}
+
+.no-scroll {
+  overflow: hidden;
 }

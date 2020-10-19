@@ -11,6 +11,7 @@ import {MessageListComponent} from './message-list/message-list.component';
 import {WebSocketService} from '../service/web-socket.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AddChannelDialogComponent } from './add-channel-dialog/add-channel-dialog.component';
+import { HeaderPanelComponent } from './header-panel/header-panel.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { AddChannelDialogComponent } from './add-channel-dialog/add-channel-dial
     LeftPanelComponent,
     MainPanelComponent,
     MessageListComponent,
-    AddChannelDialogComponent
+    AddChannelDialogComponent,
+    HeaderPanelComponent
   ],
   imports: [
     BrowserModule,
