@@ -183,8 +183,10 @@ body {
   margin: 5px;
 }
 
-input[type=checkbox]{
+input[type=checkbox] {
   transform: scale(1.25);
+  margin-left: 0.5em;
+  margin-top: 0.5em;
 }
 
 .form {
@@ -202,4 +204,31 @@ input[type=checkbox]{
 .form-field {
   text-align: left;
   align-items: center;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.checkbox-field {
+  padding-left: 0.25em;
+}
+
+.form textarea {
+  min-height: 5em;
+  max-height: 15em;
+}
+
+.form-button {
+  margin: 2px 4px 4px 2px;
+  min-width: 2em;
+  width: 5em;
+  min-height: 1em;
+  height: 2em;
+  background-color: #333333;
+  color: skyblue;
+  font-size: 1.25em;
+  border: 1px solid #333333;
+}
+
+.form-button:hover {
+  cursor: pointer;
 }
