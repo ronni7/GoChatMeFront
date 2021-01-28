@@ -1,5 +1,8 @@
+import {Message} from './Message';
+
 class PrivateChannelTO {
   channelID: number;
   token: string;
-  exists: boolean;
+  accepted: boolean;
+  messageList: Array<Message>;
 }

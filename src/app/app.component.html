@@ -1,12 +1,15 @@
+<router-outlet></router-outlet>
 <div class="app-container">
-  <app-header-panel></app-header-panel>
+  <app-header-panel (privateChannelAccepted)="switchPrivateUser($event)"></app-header-panel>
   <div class="body-container">
     <div class="vertical left-panel background scrollable">
-      <app-left-panel (channelSwitched)="switchChannel($event)" (privateChannelSwitched)="switchPrivateChannel($event)"></app-left-panel>
+      <app-left-panel (channelSwitched)="switchChannel($event)" [acceptedUserNickname]="acceptedUserNickname.asObservable()"
+                      (privateChannelSwitched)="switchPrivateChannel($event)"></app-left-panel>
     </div>
     <div class="vertical stretch center-panel">
-      <app-main-panel [clear]="channelSwitched.asObservable()" [tokenString]="this.token"  [token]="privateChannelSwitched.asObservable()" class="vertical stretch">
-        <router-outlet></router-outlet>
+      <app-main-panel [clear]="channelSwitched.asObservable()" [tokenString]="this.token" [token]="privateChannelSwitched.asObservable()"
+                      class="vertical stretch">
+
       </app-main-panel>
     </div>
     <div class="vertical right-panel background scrollable">

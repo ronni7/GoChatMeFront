@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Channel} from '../model/Channel';
-import {User} from '../model/User';
 
 
 @Injectable({
@@ -21,13 +20,6 @@ export class ChannelService {
     return this.http.get<Channel[]>('https://localhost:8444/goChatMe/channel/channelsByName?name=' + channelName.trim());
   }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>('https://localhost:8444/goChatMe/users');
-  }
-
-  getUsersByName(userName: string): Observable<User[]> {
-    return this.http.get<User[]>('https://localhost:8444/goChatMe/usersByName?name=' + userName.trim());
-  }
 
   addChannel(body: Channel): Observable<Channel> {
     return this.http.post<Channel>('https://localhost:8444/goChatMe/channel/addChannel', body);
@@ -40,4 +32,8 @@ export class ChannelService {
     });
   }
 
+  accept(token: string): Observable<void> {
+    return this.http.post<void>('https://localhost:8444/goChatMe/channel/accept',
+      token);
+  }
 }

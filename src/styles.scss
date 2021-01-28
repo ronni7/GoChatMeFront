@@ -219,6 +219,7 @@ input[type=checkbox] {
   align-items: center;
   margin-top: 0.25em;
   margin-bottom: 0.25em;
+  margin-right: 0.25em;
 }
 
 .checkbox-field {
@@ -244,6 +245,11 @@ input[type=checkbox] {
 
 .form-button:hover {
   cursor: pointer;
+}
+
+.form-button:disabled {
+  color: #333333;
+  background-color: lightgray;
 }
 
 .toolbar {
@@ -295,4 +301,22 @@ input[type=checkbox] {
 
 .no-scroll {
   overflow: hidden;
+}
+
+.login-centered {
+  width: 25%;
+  margin: 1% 37.5%;
+}
+
+.login-panel {
+  background-color: #54d268;
+}
+
+.form-control {
+  display: flex
+}
+
+.form-centered {
+  width: 25%;
+  margin: 0 auto 0;
 }

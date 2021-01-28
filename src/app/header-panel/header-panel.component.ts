@@ -1,7 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Message} from '../../model/Message';
 import {WebSocketService} from '../../service/web-socket.service';
-import {InvitationMessage} from '../../model/InvitationMessage';
+import {Notification} from '../../model/Notification';
+import {NotificationType} from '../../model/enums/NotificationType';
+import {ChannelService} from '../../service/channel.service';
+import {log} from 'util';
+import {not} from 'rxjs/internal-compatibility';
 
 @Component({
   selector: 'app-header-panel',
@@ -10,9 +14,11 @@ import {InvitationMessage} from '../../model/InvitationMessage';
 })
 export class HeaderPanelComponent implements OnInit {
   notificationListExpanded = false;
-  notifications: InvitationMessage[];
+  notifications: Notification[];
+  NotificationType = NotificationType;
+  @Output() privateChannelAccepted = new EventEmitter<string>();
 
-  constructor(private webSocketService: WebSocketService) {
+  constructor(private webSocketService: WebSocketService, public channelService: ChannelService) {
     this.notifications = this.webSocketService.notifications;
   }
 
@@ -23,9 +29,16 @@ export class HeaderPanelComponent implements OnInit {
     this.notificationListExpanded = !this.notificationListExpanded;
   }
 
-  dispatchInvitation(notification: InvitationMessage, accept: boolean) {
-    if (accept) {
-      this.webSocketService.connectToCreatedPrivateChat(notification.token);
+  dispatchNotification(notification: Notification, accept: boolean) {
+    if (notification.type === NotificationType.INVITATION && accept) {
+      this.channelService.accept(notification.body).subscribe(response => {
+        this.webSocketService.sendInvitationAccepted(notification);
+        this.privateChannelAccepted.emit(notification.from);
+      });
+
+    }
+    if (notification.type === NotificationType.INVITATION_ACCEPTED && accept) {
+        this.privateChannelAccepted.emit(notification.from);
     }
     this.notifications.splice(this.notifications.indexOf(notification), 1);
   }

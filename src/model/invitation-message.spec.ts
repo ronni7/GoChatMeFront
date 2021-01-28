@@ -1,7 +1,7 @@
-import { InvitationMessage } from './InvitationMessage';
+import { Notification } from './Notification';
 
 describe('InvitationMessage', () => {
   it('should create an instance', () => {
-    expect(new InvitationMessage()).toBeTruthy();
+    expect(new Notification()).toBeTruthy();
   });
 });

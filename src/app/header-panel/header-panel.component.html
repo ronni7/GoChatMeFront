@@ -1,4 +1,5 @@
 <div class="toolbar" role="banner">
+
   <!-- <img
      width="40"
      alt="Angular Logo"
@@ -7,31 +8,34 @@
   <i class="icon toolbar-icon fa fa-coffee right-margin extra-margin-left extra-margin-right"></i>
   <span>Go & Chat Me</span>
   <div class="spacer"></div>
-
   <div (click)="showNotifications()">
     <span>
       <i class="icon toolbar-icon fa fa-bell extra-margin-right">
     </i>
     </span>
     <span [hidden]="notifications.length < 1" class="notification-counter"
-     >  {{notifications.length}}</span>
+    >  {{notifications.length}}</span>
     <div *ngIf="!notificationListExpanded">
       <div class="vertical menu">
         <div class="vertical-item" *ngFor="let notification of notifications">
           <div class="horizontal">
-            <div
-              class="menu-item extra-margin-left extra-margin-right">{{notification.from + ' wants to open a private chat with u'}}</div>
-            <div class="menu-item accept" (click)="dispatchInvitation(notification,true)"><i
+            <div class="menu-item extra-margin-left extra-margin-right">{{notification.from +
+            (notification.type === NotificationType.INVITATION_ACCEPTED ? notification.body : ' wants to open a private chat with you')}}</div>
+            <div *ngIf="notification.type === NotificationType.INVITATION" class="menu-item accept"
+                 (click)="dispatchNotification(notification,true)"><i
               id="check" class="fa fa-check"></i></div>
+            <div *ngIf="notification.type === NotificationType.INVITATION_ACCEPTED" class="menu-item accept"
+                 (click)="dispatchNotification(notification,true)"><i
+              id="chat" class="fa fa-comment"></i></div>
             <div class="extra-margin-left"></div>
-            <div class="menu-item decline extra-margin-right" (click)="dispatchInvitation(notification,false)"><i
+            <div class="menu-item decline extra-margin-right" (click)="dispatchNotification(notification,false)"><i
               id="times"
-              class="fa fa-times"></i>
-            </div>
+              class="fa fa-times"></i></div>
           </div>
         </div>
       </div>
     </div>
+
   </div>
   <i class="icon toolbar-icon fa fa-user extra-margin-right"> </i>
   <!-- <a aria-label="Angular on twitter" target="_blank" rel="noopener" href="https://twitter.com/angular"

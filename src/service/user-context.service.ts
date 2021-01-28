@@ -1,13 +1,17 @@
 import {Injectable} from '@angular/core';
+import {User} from '../model/User';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserContextService {
-
-  username = 'Johnny';
-  userID = 1;
+  user: User;
 
   constructor() {
+
+  }
+
+  setUser(user: User) {
+    this.user = user;
   }
 }

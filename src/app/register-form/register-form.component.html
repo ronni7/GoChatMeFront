@@ -1,0 +1,39 @@
+<form [formGroup]="formGroup" (ngSubmit)="register()">
+  <div class="extra-margin-left button-container content-centered">
+    <div class="form-field horizontal">
+      <label id="registerLoginLabel" for="registerLogin">Login:</label>
+      <input id="registerLogin" formControlName="login" type="text" class="form-control stretch" required="true"/>
+    </div>
+    <div class="form-field horizontal">
+      <label id="registerPasswordLabel" for="registerPassword">Password:</label>
+      <input id="registerPassword" formControlName="password" type="password" class="form-control stretch" required="true"/>
+    </div>
+    <div class="form-field horizontal">
+      <label id="registerNameLabel" for="registerName">Name:</label>
+      <input id="registerName" formControlName="name" type="input" class="form-control stretch" required="true"/>
+    </div>
+    <div class="form-field horizontal">
+      <label id="registerNicknameLabel" for="registerNickname">Nickname:</label>
+      <input id="registerNickname" formControlName="nickname" type="input" class="form-control stretch" required="true"/>
+    </div>
+    <div class="form-field horizontal">
+      <label id="registerSurnameLabel" for="registerSurname">Surname:</label>
+      <input id="registerSurname" formControlName="surname" type="input" class="form-control stretch" required="true"/>
+    </div>
+    <div class="form-field horizontal">
+      <label id="registerEmailLabel" for="registerEmail">Email:</label>
+      <input id="registerEmail" formControlName="email" type="input" class="form-control stretch" required="true"/>
+    </div>
+    <div class="form-field horizontal">
+      <label id="SexLabel" for="registerEmail">Sex:</label>
+      <label class="form-label" for="male">Male</label>
+      <input formControlName="sex" class="form-control radio" type="radio"
+             id="male" [value]="GENDER.MALE" [checked]="'checked'"/>
+      <label class="form-label" for="female">Female</label>
+      <input formControlName="sex" class="form-control radio" type="radio" id="female" [value]="GENDER.FEMALE"/>
+    </div>
+    <input type="submit" class="form-button" value="register" [disabled]="!isRegisterFormValid()"
+           />
+    <input type="button" class="form-button" value="TEST" (click)="click()"/>
+  </div>
+</form>

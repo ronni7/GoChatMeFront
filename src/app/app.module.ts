@@ -12,6 +12,9 @@ import {WebSocketService} from '../service/web-socket.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AddChannelDialogComponent } from './add-channel-dialog/add-channel-dialog.component';
 import { HeaderPanelComponent } from './header-panel/header-panel.component';
+import { LoginPanelTempComponent } from './login-panel-temp/login-panel-temp.component';
+import { LoginFormComponent } from './login-form/login-form.component';
+import { RegisterFormComponent } from './register-form/register-form.component';
 
 
 @NgModule({
@@ -21,7 +24,10 @@ import { HeaderPanelComponent } from './header-panel/header-panel.component';
     MainPanelComponent,
     MessageListComponent,
     AddChannelDialogComponent,
-    HeaderPanelComponent
+    HeaderPanelComponent,
+    LoginPanelTempComponent,
+    LoginFormComponent,
+    RegisterFormComponent
   ],
   imports: [
     BrowserModule,

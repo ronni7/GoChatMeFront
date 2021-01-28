@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {Subject} from 'rxjs';
+import {UserContextService} from '../service/user-context.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +14,13 @@ export class AppComponent {
   channelSwitched: Subject<void> = new Subject<void>();
   token: string;
   privateChannelSwitched: Subject<string> = new Subject<string>();
+  acceptedUserNickname: Subject<string> = new Subject<string>();
 
+  constructor(private userContextService: UserContextService, private router: Router) {
+    if (!this.userContextService.user) {
+      this.router.navigate(['/login']);
+    }
+  }
 
   switchChannel(channelID: number) {
     this.channelID = channelID;
@@ -24,4 +32,7 @@ export class AppComponent {
     this.privateChannelSwitched.next(token);
   }
 
+  switchPrivateUser(nickname: string) {
+    this.acceptedUserNickname.next(nickname);
+  }
 }

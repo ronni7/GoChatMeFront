@@ -4,7 +4,8 @@ import * as SockJS from 'sockjs-client';
 import {MessageType} from '../model/enums/MessageType';
 import {Message} from '../model/Message';
 import {UserContextService} from './user-context.service';
-import {InvitationMessage} from '../model/InvitationMessage';
+import {Notification} from '../model/Notification';
+import {NotificationType} from '../model/enums/NotificationType';
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +18,16 @@ export class WebSocketService {
   private chatroom: string;
   private chatEndpoint: string;
   public incomingMessages: Message[] = [];
-  public notifications: InvitationMessage[] = [];
+  public notifications: Notification[] = [];
   stompClientPrivate: any;
   incomingPrivateMessages: Message[] = [];
+  notificationsSocket: SockJS;
+  stompClientNotifications: any;
+
 
   constructor(private userContextService: UserContextService) {
     this.chatEndpoint = '/chat/';
-
+    this.enableNotifications();
   }
 
 
@@ -31,13 +35,14 @@ export class WebSocketService {
     this.socket = new SockJS('https://localhost:8444/chat');
     this.stompClient = Stomp.over(this.socket);
     this.chatroom = '/chatroom/' + this.currentRoomID; // was /chatroom/notifications/
-    this.stompClient.connect({}, frame => {
-      this.stompClient.subscribe(
-        this.chatroom, messageOutput => (this.receiveMessage(JSON.parse(messageOutput.body))),
-        {username: this.userContextService.username}
-      );
-    }, err => (this.reconnectOnError(err)));
-    // this.enableNotifications();
+    if (this.userContextService.user) {
+      this.stompClient.connect({}, frame => {
+        this.stompClient.subscribe(
+          this.chatroom, messageOutput => (this.receiveMessage(JSON.parse(messageOutput.body))),
+          {username: this.userContextService.user.name}
+        );
+      }, err => (this.reconnectOnError(err)));
+    }
   }
 
 
@@ -49,37 +54,56 @@ export class WebSocketService {
       this.stompClientPrivate.subscribe('/chatroom/private/' + token, messageOutput => {
           this.showPrivateMessageOutput(JSON.parse(messageOutput.body));
         },
-        {username: this.userContextService.username});
+        {username: this.userContextService.user.name});
     }, err => (this.reconnectPrivateOnError(err, token)));
-    // this.enableNotifications(); // ?
   }
 
   enableNotifications() {
-    this.privateSocket = new SockJS('https://localhost:8444/chat');
-    this.stompClientPrivate = Stomp.over(this.privateSocket);
-    // undefined
-    this.stompClientPrivate.connect({}, frame => {
-      this.stompClientPrivate.subscribe('/chatroom/notifications/' + this.userContextService.userID + '/', notification => {
-          this.showNotification(JSON.parse(notification.body));
-        },
-        {username: 'nick'});
-    });
+    this.notificationsSocket = new SockJS('https://localhost:8444/chat');
+    this.stompClientNotifications = Stomp.over(this.notificationsSocket);
+    if (this.userContextService.user) {
+      this.stompClientNotifications.connect({}, frame => {
+        this.stompClientNotifications.subscribe('/chatroom/notifications/' + this.userContextService.user.id + '/', notification => {
+            this.showNotification(JSON.parse(notification.body));
+          },
+          {username: 'nick'});
+        this.stompClientNotifications.subscribe('/chatroom/notifications/accepted/' + this.userContextService.user.id + '/', notification => {
+            this.showNotification(JSON.parse(notification.body));
+          },
+          {username: 'nick'});
+      });
+    }
   }
 
   sendNotification(destinationUserNickname: string, token: string) {
-    this.stompClient.send('/chat/notifications/' + this.userContextService.userID, {},
-      JSON.stringify({from: this.userContextService.username, token, receiver: destinationUserNickname}));
+    this.stompClient.send('/chat/notifications/' + this.userContextService.user.id, {},
+      JSON.stringify({
+        from: this.userContextService.user.name, //this.userContextService.user.id
+        token, //body:token
+        receiver: destinationUserNickname,
+        type: NotificationType.INVITATION
+      }));
   }
 
-  private showNotification(message: InvitationMessage) {
-    this.notifications.push(message);
+  sendInvitationAccepted(notification: Notification) {
+    this.stompClient.send('/chat/notifications/accepted/' + this.userContextService.user.id, {},
+      JSON.stringify({
+        senderID: this.userContextService.user.id,
+        token: notification.body,
+        receiver: notification.from,
+        type: NotificationType.INVITATION_ACCEPTED
+      }));
+  }
+
+  private showNotification(notification: Notification) {
+    this.notifications.push(notification);
   }
 
   sendMessage(message?: string) {
     this.stompClient.send('/chat/' + this.currentRoomID, {},
       JSON.stringify(
         {
-          from: this.userContextService.username,
+          from: this.userContextService.user.name,
           text: message ? message : 'HELLO IS IT ME U LOOKIN FOR',
           messageType: MessageType.NORMAL
         }
@@ -90,7 +114,7 @@ export class WebSocketService {
     this.stompClient.send('/chat/private/' + token, {},
       JSON.stringify(
         {
-          from: this.userContextService.username,
+          from: this.userContextService.user.name,
           text: message ? message : 'HELLO IS IT ME U LOOKIN FOR',
           messageType: MessageType.NORMAL
         }
@@ -112,18 +136,22 @@ export class WebSocketService {
     this.connectTo();
   }
 
-  switchPrivateRoom(token: string) {
+  switchPrivateRoom(token: string, messages?: Array<Message>) {
     this.disconnectPrivate();
-    this.incomingPrivateMessages = new Array<Message>();
+    this.incomingPrivateMessages = messages ? messages : new Array<Message>();
     this.connectToCreatedPrivateChat(token);
   }
 
   disconnect() {
-    this.stompClient.disconnect();
+    if (this.stompClient) {
+      this.stompClient.disconnect();
+    }
   }
 
   disconnectPrivate() {
-    this.stompClientPrivate.disconnect();
+    if (this.stompClientPrivate) {
+      this.stompClientPrivate.disconnect();
+    }
   }
 
   reconnectOnError(error: any) {
@@ -137,4 +165,6 @@ export class WebSocketService {
       this.connectToCreatedPrivateChat(token);
     }, 5000);
   }
+
+
 }
