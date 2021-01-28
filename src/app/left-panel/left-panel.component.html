@@ -29,7 +29,7 @@
   <span class="extra-padding-top"></span>
   <div class="channel" *ngFor="let channel of channelsDisplayed" [hidden]="channelsExpanded">
     <div class="vertical-item horizontal extra-padding-left"
-         [ngClass]="channel.channelID === this.selectedChannelID ? 'selected' : ''">
+         [ngClass]="channel.channelID ===  this.selectedChannelID && !this.viewingPrivateChannel ? 'selected' : '' ">
       <i class="icon fa fa-copyright extra-margin-right"></i>
       <a class="link" (click)="joinChannel(channel.channelID)">{{channel.name}}</a>
     </div>
@@ -53,7 +53,7 @@
   </div>
   <div class="vertical-item horizontal" *ngIf="userSearchExpanded">
     <div class="horizontal stretch">
-      <input type="search" class="stretch"  [(ngModel)]="userFilterText" (input)="filterUsers()"/>
+      <input type="search" class="stretch" [(ngModel)]="userFilterText" (input)="filterUsers()"/>
       <span>
       <button class="button-container" id="searchUser" type="button" (click)="searchUsers()">
         <i class="icon fa fa-search"></i>
@@ -64,10 +64,11 @@
   <app-add-channel-dialog *ngIf="addChannelVisible" (close)="onDialogClose()"></app-add-channel-dialog>
   <span class="extra-padding-top"></span>
   <div class="channel" *ngFor="let user of usersDisplayed" [hidden]="usersExpanded">
-    <div class="vertical-item horizontal  extra-padding-left">
+    <div  *ngIf="user?.id !== userContextService?.user?.id" class="vertical-item horizontal extra-padding-left"
+         [ngClass]="user?.nickname === this.selectedNickname && this.viewingPrivateChannel ? 'selected' : ''">
       <i class="icon fa fa-user extra-margin-right"></i>
-      <a class="link" (click)="joinPrivateChannel(user.id)">{{user.name}}</a>
+      <a class="link" [id]="user?.nickname" (click)="joinPrivateChannel(user?.nickname)">{{user?.nickname}}</a>
     </div>
-    <div class="separator-medium"></div>
+    <div  *ngIf="user?.id !== userContextService?.user?.id" class="separator-medium"></div>
   </div>
 </div>

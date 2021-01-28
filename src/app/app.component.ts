@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {Subject} from 'rxjs';
+import {UserContextService} from '../service/user-context.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,15 +11,28 @@ import {Subject} from 'rxjs';
 export class AppComponent {
   title = 'goChatMe';
   channelID: number;
-  eventsSubject: Subject<void> = new Subject<void>();
+  channelSwitched: Subject<void> = new Subject<void>();
+  token: string;
+  privateChannelSwitched: Subject<string> = new Subject<string>();
+  acceptedUserNickname: Subject<string> = new Subject<string>();
 
-  emitEventToChild() {
-    this.eventsSubject.next();
+  constructor(private userContextService: UserContextService, private router: Router) {
+    if (!this.userContextService.user) {
+      this.router.navigate(['/login']);
+    }
   }
 
   switchChannel(channelID: number) {
     this.channelID = channelID;
-    this.emitEventToChild();
+    this.channelSwitched.next();
   }
 
+  switchPrivateChannel(token: string) {
+    this.token = token;
+    this.privateChannelSwitched.next(token);
+  }
+
+  switchPrivateUser(nickname: string) {
+    this.acceptedUserNickname.next(nickname);
+  }
 }
