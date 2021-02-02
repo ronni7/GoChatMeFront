@@ -28,7 +28,7 @@ export class LoginFormComponent implements OnInit {
   login() {
     this.userService.logUserIn(this.getFormData()).subscribe(response => {
       if (response) {
-        this.userContextService.setUser(response as User);
+        this.userContextService.setUserLogged(response as User);
         this.router.navigate(['/']);
       }
     });

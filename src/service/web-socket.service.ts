@@ -39,7 +39,7 @@ export class WebSocketService {
       this.stompClient.connect({}, frame => {
         this.stompClient.subscribe(
           this.chatroom, messageOutput => (this.receiveMessage(JSON.parse(messageOutput.body))),
-          {username: this.userContextService.user.name}
+          {username: this.userContextService.user.nickname}
         );
       }, err => (this.reconnectOnError(err)));
     }
@@ -49,12 +49,11 @@ export class WebSocketService {
   connectToCreatedPrivateChat(token: string) {
     this.privateSocket = new SockJS('https://localhost:8444/chat');
     this.stompClientPrivate = Stomp.over(this.privateSocket);
-    //    // async error
     this.stompClientPrivate.connect({}, frame => {
       this.stompClientPrivate.subscribe('/chatroom/private/' + token, messageOutput => {
           this.showPrivateMessageOutput(JSON.parse(messageOutput.body));
         },
-        {username: this.userContextService.user.name});
+        {username: this.userContextService.user.nickname});
     }, err => (this.reconnectPrivateOnError(err, token)));
   }
 
@@ -66,11 +65,11 @@ export class WebSocketService {
         this.stompClientNotifications.subscribe('/chatroom/notifications/' + this.userContextService.user.id + '/', notification => {
             this.showNotification(JSON.parse(notification.body));
           },
-          {username: 'nick'});
+          {username: this.userContextService.user.nickname});
         this.stompClientNotifications.subscribe('/chatroom/notifications/accepted/' + this.userContextService.user.id + '/', notification => {
             this.showNotification(JSON.parse(notification.body));
           },
-          {username: 'nick'});
+          {username: this.userContextService.user.nickname});
       });
     }
   }
@@ -78,8 +77,8 @@ export class WebSocketService {
   sendNotification(destinationUserNickname: string, token: string) {
     this.stompClient.send('/chat/notifications/' + this.userContextService.user.id, {},
       JSON.stringify({
-        from: this.userContextService.user.name, //this.userContextService.user.id
-        token, //body:token
+        from: this.userContextService.user.nickname,
+        token,
         receiver: destinationUserNickname,
         type: NotificationType.INVITATION
       }));
@@ -103,19 +102,19 @@ export class WebSocketService {
     this.stompClient.send('/chat/' + this.currentRoomID, {},
       JSON.stringify(
         {
-          from: this.userContextService.user.name,
+          from: this.userContextService.user.nickname,
           text: message ? message : 'HELLO IS IT ME U LOOKIN FOR',
           messageType: MessageType.NORMAL
         }
       ));
   }
 
-  sendPrivateMessage(token: string, message?: string) {
+  sendPrivateMessage(token: string, message: string) {
     this.stompClient.send('/chat/private/' + token, {},
       JSON.stringify(
         {
-          from: this.userContextService.user.name,
-          text: message ? message : 'HELLO IS IT ME U LOOKIN FOR',
+          from: this.userContextService.user.nickname,
+          text: message,
           messageType: MessageType.NORMAL
         }
       ));

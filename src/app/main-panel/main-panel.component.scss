@@ -13,6 +13,6 @@
 }
 
 .chat-content {
-  height: 100%;
-  max-height: 84vh;
+  //height: 100%;
+  height: calc(100vh - 4em - 4.5em); //toolbar height + // send input and margins
 }

@@ -26,9 +26,7 @@
 }
 
 .channel {
-  //text-align: center;
   padding: 0 2px 0 2px;
-  //box-shadow: 1px 1px gold;
 }
 
 .border-thin {
@@ -68,6 +66,10 @@
 
 .icon.toolbar-icon {
   font-size: 30px;
+}
+
+.icon.toolbar-icon:focus {
+  background-color: #272727;
 }
 
 
@@ -118,8 +120,7 @@ body {
 
 .left-panel, .right-panel {
   padding-top: 1em;
-  min-width: 15%;
-  width: 15%;
+  min-width: 15em;
   max-width: 15%;
   display: flex;
   flex: 1;
@@ -128,9 +129,20 @@ body {
 }
 
 .app-container {
+  color: white;
   min-height: 100vh;
-  height: 100vh;
   max-height: 100vh;
+  margin: 0 auto;
+}
+
+.background-image {
+  background-image: url("./assets/background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  max-height: 100vh;
+  margin: 0 auto;
 }
 
 .body-container {
@@ -148,9 +160,9 @@ body {
 }
 
 .center-panel {
-  height: 92.6vh; //fixme
-  min-height: 92.6vh; //fixme
-  max-height: 92.6vh; //fixme
+  height: calc(100vh - 4em);
+  min-height: calc(100vh - 4em);
+  max-height: calc(100vh - 4em);
   padding: 0.25em;
   margin: 0.25em;
   flex: 1;
@@ -252,6 +264,10 @@ input[type=checkbox] {
   background-color: lightgray;
 }
 
+.form-button:disabled:hover {
+  cursor: unset;
+}
+
 .toolbar {
   height: 4em;
   margin: -8px;
@@ -303,20 +319,39 @@ input[type=checkbox] {
   overflow: hidden;
 }
 
-.login-centered {
-  width: 25%;
-  margin: 1% 37.5%;
-}
-
 .login-panel {
+  display: inline-block;
   background-color: #54d268;
+  min-height: 50vh;
+  min-width: 50vw;
+  margin: auto;
 }
 
 .form-control {
   display: flex
 }
 
-.form-centered {
-  width: 25%;
-  margin: 0 auto 0;
+.button-long {
+  width: unset;
+  display: inline-flex;
+}
+
+.icon.tooltip-disabled:hover {
+  background-color: transparent;
+  cursor: unset;
+}
+
+.item-list {
+  max-height: calc(50vh - 2.75em);
+  overflow-y: auto;
+}
+
+.icon-inside {
+  color: white;
+  margin: 0 -1.25em;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
 }

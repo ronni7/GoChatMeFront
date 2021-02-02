@@ -12,11 +12,11 @@ import {Subscription} from 'rxjs';
   templateUrl: './left-panel.component.html',
   styleUrls: ['./left-panel.component.scss']
 })
-export class LeftPanelComponent implements OnInit, OnDestroy {
+export class LeftPanelComponent implements OnInit {
   @Output() channelSwitched = new EventEmitter<number>();
   @Output() privateChannelSwitched = new EventEmitter<string>();
   @Input() acceptedUserNickname: any;
-  private acceptedUserNicknameSubscription: Subscription;
+  acceptedUserNicknameSubscription: Subscription;
   selectedChannelID: number;
   channels: Array<Channel>;
   channelsDisplayed: Array<Channel>;
@@ -32,8 +32,6 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
   viewingPrivateChannel = false;
   selectedNickname: string;
 
-  // private privateMessaging: Subscription;
-
   constructor(public userContextService: UserContextService,
               public channelService: ChannelService,
               public webSocketService: WebSocketService,
@@ -48,7 +46,9 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
     this.acceptedUserNicknameSubscription = this.acceptedUserNickname.subscribe((nickname) => {
       this.selectedNickname = nickname;
       const element: HTMLElement = document.getElementById(nickname);
-      element.click();
+      if (element) {
+        element.click();
+      }
     });
   }
 
@@ -130,7 +130,6 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
         if (!response.accepted) {
           this.sendNotification(this.selectedNickname, response.token);
         } else {
-          console.log(response);
           this.viewingPrivateChannel = true;
           this.webSocketService.switchPrivateRoom(response.token, response.messageList);
           this.privateChannelSwitched.emit(response.token);
@@ -150,7 +149,7 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
 
   filterUsers() {
     if (this.userFilterText) {
-      this.usersDisplayed = this.users.filter(user => user.name.toLocaleUpperCase().includes(this.userFilterText.toLocaleUpperCase()));
+      this.usersDisplayed = this.users.filter(user => user.nickname.toLocaleUpperCase().includes(this.userFilterText.toLocaleUpperCase()));
       return;
     } else {
       this.getUsers();
@@ -178,8 +177,10 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
     this.webSocketService.sendNotification(name, token);
   }
 
-  ngOnDestroy() {
-    // this.privateMessaging.unsubscribe();
+  ngOnDestroy(): void {
+    this.webSocketService.disconnect();
+    this.webSocketService.disconnectPrivate();
+    this.userContextService.signOut();
   }
 }
 

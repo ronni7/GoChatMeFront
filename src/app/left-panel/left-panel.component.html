@@ -1,4 +1,4 @@
-<div class="border-thin vertical">
+<div class="item-list border-thin vertical scrollable">
   <div class="vertical-item horizontal extra-padding-top">
     <button class="button-container" *ngIf="channelsExpanded" (click)="expandChannels()">
       <i class="icon fa fa-caret-square-down"></i>
@@ -6,7 +6,7 @@
     <button class="button-container" *ngIf="!channelsExpanded" (click)="expandChannels()">
       <i class="icon fa fa-caret-square-up"></i>
     </button>
-    <span>Channels</span>
+    <span class="extra-margin-left">Channels</span>
     <div class="spacer"></div>
     <button class="button-container" id="add" type="button" (click)="toggleAddChannelVisible()">
       <i class="icon fa fa-plus-circle"></i>
@@ -37,7 +37,7 @@
   </div>
 </div>
 <div class="separator-big"></div>
-<div class="border-thin vertical">
+<div class="item-list border-thin vertical scrollable">
   <div class="vertical-item horizontal  extra-padding-top">
     <button class="button-container" *ngIf="usersExpanded" (click)="expandUsers()">
       <i class="icon fa fa-caret-square-down"></i>
@@ -45,7 +45,7 @@
     <button class="button-container" *ngIf="!usersExpanded" (click)="expandUsers()">
       <i class="icon fa fa-caret-square-up"></i>
     </button>
-    <span>Users</span>
+    <span class="extra-margin-left">Users</span>
     <div class="spacer"></div>
     <button class="button-container" (click)="showUsersSearch()">
       <i class="icon fa fa-search-plus"></i>
@@ -64,11 +64,11 @@
   <app-add-channel-dialog *ngIf="addChannelVisible" (close)="onDialogClose()"></app-add-channel-dialog>
   <span class="extra-padding-top"></span>
   <div class="channel" *ngFor="let user of usersDisplayed" [hidden]="usersExpanded">
-    <div  *ngIf="user?.id !== userContextService?.user?.id" class="vertical-item horizontal extra-padding-left"
+    <div *ngIf="user?.id !== userContextService?.user?.id" class="vertical-item horizontal extra-padding-left"
          [ngClass]="user?.nickname === this.selectedNickname && this.viewingPrivateChannel ? 'selected' : ''">
       <i class="icon fa fa-user extra-margin-right"></i>
       <a class="link" [id]="user?.nickname" (click)="joinPrivateChannel(user?.nickname)">{{user?.nickname}}</a>
     </div>
-    <div  *ngIf="user?.id !== userContextService?.user?.id" class="separator-medium"></div>
+    <div *ngIf="user?.id !== userContextService?.user?.id" class="separator-medium"></div>
   </div>
 </div>

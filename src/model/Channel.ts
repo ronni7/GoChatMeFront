@@ -1,3 +1,5 @@
+import {Message} from './Message';
+
 export class Channel {
   constructor() {
 
@@ -5,7 +7,7 @@ export class Channel {
 
   channelID: number;
   name: string;
-  messageList: Array<any> = []; // MessageOutputDTO
+  messageList: Array<Message> = []; // MessageOutputDTO
   description: string;
   active: boolean;
   adultsOnly: boolean;
