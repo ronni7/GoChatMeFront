@@ -11,7 +11,7 @@ import {Subscription} from 'rxjs';
 export class MessageListComponent implements OnInit, OnDestroy {
   @Input() messages: Message[] = [];
   @Input() clear: any;
-  private clearSubscription: Subscription;
+  clearSubscription: Subscription;
 
   constructor(public uiHelperService: UIHelperService) {
   }

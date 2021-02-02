@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Channel} from '../model/Channel';
-
+import {PrivateChannelTO} from '../model/PrivateChannelTO';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,6 @@ export class ChannelService {
   getChannelsByName(channelName: string) {
     return this.http.get<Channel[]>('https://localhost:8444/goChatMe/channel/channelsByName?name=' + channelName.trim());
   }
-
 
   addChannel(body: Channel): Observable<Channel> {
     return this.http.post<Channel>('https://localhost:8444/goChatMe/channel/addChannel', body);

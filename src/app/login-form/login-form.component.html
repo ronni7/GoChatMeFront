@@ -1,5 +1,5 @@
 <form [formGroup]="formGroup" (ngSubmit)="login()">
-  <div class="extra-margin-left button-container content-centered">
+  <div class="extra-margin-left content-centered">
     <div class="form-field horizontal">
       <label id="loginLabel" for="login">Login:</label>
       <input id="login" formControlName="login" type="text" class="form-control stretch" [required]="true"/>
@@ -8,6 +8,6 @@
       <label id="passwordLabel" for="password">Password:</label>
       <input id="password" formControlName="password" type="password" class="form-control stretch" [required]="true"/>
     </div>
-    <input type="submit" class="form-button" value="login" [disabled]="!this.isFormValid()" (submit)="login()"/>
+    <input type="submit" class="form-button" value="Sign in" [disabled]="!this.isFormValid()" (submit)="login()"/>
   </div>
 </form>

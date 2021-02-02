@@ -2,6 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {WebSocketService} from '../../service/web-socket.service';
 import {Message} from '../../model/Message';
 import {Subject, Subscription} from 'rxjs';
+import {UserContextService} from '../../service/user-context.service';
 
 @Component({
   selector: 'app-main-panel',
@@ -19,10 +20,10 @@ export class MainPanelComponent implements OnInit, OnDestroy {
   messages: Message[] = [];
   privateMessages: Message[] = [];
   eventSubject: Subject<void> = new Subject<void>();
-  private clearSubscription: Subscription;
-  private privateSubscription: Subscription;
+  clearSubscription: Subscription;
+  privateSubscription: Subscription;
 
-  constructor(private webSocketService: WebSocketService) {
+  constructor(private webSocketService: WebSocketService, private userContextService: UserContextService) {
   }
 
   ngOnInit() {
@@ -53,13 +54,16 @@ export class MainPanelComponent implements OnInit, OnDestroy {
   emitPrivateClearEvent() {
     this.viewingPrivateConversation = true;
     this.eventSubject.next();
-    console.log('porzeciez lol', this.webSocketService.incomingPrivateMessages);
     this.privateMessages = this.webSocketService.incomingPrivateMessages;
   }
 
   ngOnDestroy() {
     this.clearSubscription.unsubscribe();
     this.privateSubscription.unsubscribe();
+    this.webSocketService.disconnect();
+    this.webSocketService.disconnectPrivate();
+    this.userContextService.signOut();
+
   }
 
 }

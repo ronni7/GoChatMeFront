@@ -2,8 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {User} from '../../model/User';
 import {UserContextService} from '../../service/user-context.service';
 import {UserService} from '../../service/user.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {LoginRequestBody} from '../../model/LoginRequestBody';
 import {Router} from '@angular/router';
 
 @Component({
@@ -13,11 +11,10 @@ import {Router} from '@angular/router';
 })
 export class LoginPanelTempComponent implements OnInit {
   users: User[];
-  private selectedUser: User;
+  selectedUser: User;
 
 
-
-  constructor(private router: Router, private userContextService: UserContextService, private userService: UserService, private formBuilder: FormBuilder) {
+  constructor(private router: Router, private userContextService: UserContextService, private userService: UserService) {
 
   }
 
@@ -31,7 +28,10 @@ export class LoginPanelTempComponent implements OnInit {
 
   setUser(user: User) {
     this.selectedUser = user;
-    this.userContextService.setUser(user);
+    this.userContextService.setUserLogged(user);
   }
 
+  signInWithGoogle() {
+    this.userContextService.signInWithGoogle();
+  }
 }
