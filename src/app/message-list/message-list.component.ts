@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Message} from '../../model/Message';
 import {UIHelperService} from '../../service/uihelper.service';
 import {Subscription} from 'rxjs';
@@ -8,12 +8,12 @@ import {Subscription} from 'rxjs';
   templateUrl: './message-list.component.html',
   styleUrls: ['./message-list.component.scss']
 })
-export class MessageListComponent implements OnInit {
+export class MessageListComponent implements OnInit, OnDestroy {
   @Input() messages: Message[] = [];
   @Input() clear: any;
-  private clearSubscription: Subscription;
+  clearSubscription: Subscription;
 
-  constructor(private uiHelperService: UIHelperService) {
+  constructor(public uiHelperService: UIHelperService) {
   }
 
   ngOnInit() {

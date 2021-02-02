@@ -15,7 +15,7 @@ export class AddChannelDialogComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private channelService: ChannelService) {
     this.formGroup = this.formBuilder.group(
       {
-        name: ['', [Validators.required]],
+        name: ['', [Validators.required, Validators.maxLength(32)]],
         description: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(4196)]],
         adultsOnly: []
       });
@@ -42,7 +42,7 @@ export class AddChannelDialogComponent implements OnInit {
     });
   }
 
-  private closeDialog() {
+  closeDialog() {
     this.close.emit();
   }
 

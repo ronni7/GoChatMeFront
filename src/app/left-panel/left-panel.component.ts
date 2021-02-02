@@ -1,8 +1,11 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ChannelService} from '../../service/channel.service';
 import {Channel} from '../../model/Channel';
 import {User} from '../../model/User';
 import {WebSocketService} from '../../service/web-socket.service';
+import {UserContextService} from '../../service/user-context.service';
+import {UserService} from '../../service/user.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-left-panel',
@@ -11,6 +14,9 @@ import {WebSocketService} from '../../service/web-socket.service';
 })
 export class LeftPanelComponent implements OnInit {
   @Output() channelSwitched = new EventEmitter<number>();
+  @Output() privateChannelSwitched = new EventEmitter<string>();
+  @Input() acceptedUserNickname: any;
+  acceptedUserNicknameSubscription: Subscription;
   selectedChannelID: number;
   channels: Array<Channel>;
   channelsDisplayed: Array<Channel>;
@@ -23,19 +29,35 @@ export class LeftPanelComponent implements OnInit {
   channelFilterText: string;
   userFilterText: string;
   addChannelVisible = false;
+  viewingPrivateChannel = false;
+  selectedNickname: string;
 
-  constructor(private channelService: ChannelService, private webSocketService: WebSocketService) {
+  constructor(public userContextService: UserContextService,
+              public channelService: ChannelService,
+              public webSocketService: WebSocketService,
+              public userService: UserService
+  ) {
+
   }
 
   ngOnInit() {
     this.initData();
     this.selectedChannelID = this.webSocketService.currentRoomID;
+    this.acceptedUserNicknameSubscription = this.acceptedUserNickname.subscribe((nickname) => {
+      this.selectedNickname = nickname;
+      const element: HTMLElement = document.getElementById(nickname);
+      if (element) {
+        element.click();
+      }
+    });
   }
 
   joinChannel(channelID: number) {
-    this.webSocketService.switchRoom(channelID);
-    this.selectedChannelID = channelID;
-    this.channelSwitched.emit(channelID);
+    const id = channelID;
+    this.viewingPrivateChannel = false;
+    this.webSocketService.switchRoom(id);
+    this.selectedChannelID = id;
+    this.channelSwitched.emit(id);
   }
 
   private initData() {
@@ -45,14 +67,14 @@ export class LeftPanelComponent implements OnInit {
 
   private getUsers(userName?: string) {
     if (userName) {
-      this.channelService.getUsersByName(userName).subscribe(response => {
+      this.userService.getUsersByName(userName).subscribe(response => {
         if (response) {
           this.users = response;
           this.usersDisplayed = this.users;
         }
       });
     } else {
-      this.channelService.getUsers().subscribe(response => {
+      this.userService.getUsers().subscribe(response => {
         if (response) {
           this.users = response;
           this.usersDisplayed = this.users;
@@ -95,8 +117,25 @@ export class LeftPanelComponent implements OnInit {
     this.userSearchExpanded = !this.userSearchExpanded;
   }
 
-  joinPrivateChannel(id: number) {
-    console.log('opening private chat with' + id);
+  joinPrivateChannel(nickname?: string) {
+    if (nickname) {
+      this.selectedNickname = nickname;
+    }
+
+    if (this.selectedNickname === this.userContextService.user.nickname) {
+      return;
+    }
+    this.channelService.createPrivateChannel(this.userContextService.user.id, this.selectedNickname).subscribe(response => {
+      if (response) {
+        if (!response.accepted) {
+          this.sendNotification(this.selectedNickname, response.token);
+        } else {
+          this.viewingPrivateChannel = true;
+          this.webSocketService.switchPrivateRoom(response.token, response.messageList);
+          this.privateChannelSwitched.emit(response.token);
+        }
+      }
+    });
   }
 
   filterChannels() {
@@ -110,7 +149,7 @@ export class LeftPanelComponent implements OnInit {
 
   filterUsers() {
     if (this.userFilterText) {
-      this.usersDisplayed = this.users.filter(user => user.name.toLocaleUpperCase().includes(this.userFilterText.toLocaleUpperCase()));
+      this.usersDisplayed = this.users.filter(user => user.nickname.toLocaleUpperCase().includes(this.userFilterText.toLocaleUpperCase()));
       return;
     } else {
       this.getUsers();
@@ -133,4 +172,15 @@ export class LeftPanelComponent implements OnInit {
     this.getChannels();
     this.toggleAddChannelVisible();
   }
+
+  sendNotification(name: string, token: string) {
+    this.webSocketService.sendNotification(name, token);
+  }
+
+  ngOnDestroy(): void {
+    this.webSocketService.disconnect();
+    this.webSocketService.disconnectPrivate();
+    this.userContextService.signOut();
+  }
 }
+

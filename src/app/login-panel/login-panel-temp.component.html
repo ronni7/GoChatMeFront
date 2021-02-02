@@ -1,0 +1,16 @@
+<div class="app-container">
+  <div class="background-image" title="Photo by eberhard grossgasteiger from Pexels">
+    <div class="vertical stretch content-centered center-panel">
+      <div title="" class="border-thin login-panel login-centered">
+        <app-login-form></app-login-form>
+        <div class="extra-margin-left content-centered">
+          <div class="white-font">Or</div>
+          <input type="button" class="form-button button-container button-long" (click)="signInWithGoogle()"
+                 value="Sign in with Google"/>
+        </div>
+        <h3 class="content-centered">Don't have an account? Sign up!</h3>
+        <app-register-form></app-register-form>
+      </div>
+    </div>
+  </div>
+</div>

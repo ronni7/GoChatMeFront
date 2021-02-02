@@ -1,0 +1,62 @@
+<div class="toolbar" role="banner">
+  <i class="icon toolbar-icon fa fa-coffee right-margin extra-margin-left extra-margin-right"></i>
+  <span>Go & Chat Me</span>
+  <div class="spacer"></div>
+  <div (click)="showNotifications()">
+    <span>
+      <i class="icon toolbar-icon fa fa-bell extra-margin-right">
+    </i>
+    </span>
+    <span [hidden]="notifications.length < 1" class="notification-counter"
+    >  {{notifications.length}}</span>
+    <div *ngIf="notificationListExpanded">
+      <div class="vertical menu">
+        <div class="vertical-item" *ngIf="notifications.length === 0 && notificationListExpanded">
+          <div class="horizontal extra-margin-left extra-margin-right">No new notifications</div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!notificationListExpanded">
+      <div class="vertical menu">
+        <div class="vertical-item" *ngFor="let notification of notifications">
+          <div class="horizontal">
+            <div class="menu-item extra-margin-left extra-margin-right">{{notification.from +
+            (notification.type === NotificationType.INVITATION_ACCEPTED ? ' has accepted your request' : ' wants to open a private chat with you')}}</div>
+            <div *ngIf="notification.type === NotificationType.INVITATION" class="menu-item accept"
+                 (click)="dispatchNotification(notification,true)"><i
+              id="check" class="fa fa-check"></i></div>
+            <div *ngIf="notification.type === NotificationType.INVITATION_ACCEPTED" class="menu-item accept"
+                 (click)="dispatchNotification(notification,true)"><i
+              id="chat" class="fa fa-comment"></i></div>
+            <div class="extra-margin-left"></div>
+            <div class="menu-item decline extra-margin-right" (click)="dispatchNotification(notification,false)"><i
+              id="times"
+              class="fa fa-times"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div (click)="showUserSettings()">
+    <span>
+      <i class="icon toolbar-icon fa fa-user extra-margin-right"> </i>
+    </span>
+    <div *ngIf="userSettingsExpanded">
+      <div class="vertical menu">
+        <div class="horizontal">
+          <div class="extra-margin-left icon toolbar-icon extra-margin-right tooltip-disabled" (click)="logout()"><i
+            class="fa fa-user"></i></div>
+          <div class="vertical vertical-item extra-margin-right">
+            <div
+              class="extra-margin-left extra-margin-right">{{this.userContextService.user.name + ' ' + this.userContextService.user.nickname}}
+            </div>
+            <div class=" extra-margin-left extra-margin-right">{{this.userContextService.user.email}}</div>
+
+          </div>
+          <div class="decline icon toolbar-icon extra-margin-right" (click)="logout()"><i
+            class="fa fa-power-off"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
